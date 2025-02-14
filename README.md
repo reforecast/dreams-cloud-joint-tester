@@ -79,7 +79,18 @@ CONTAINER ID   IMAGE                                          COMMAND           
 421bddc6ef5e   dreams-cloud-joint-tester-fake-modbus-server   "python -m fake_slave"   About a minute ago   Up About a minute   0.0.0.0:502->502/tcp, :::502->502/tcp   fake-modbus-server
 ```
 
-2. EMS 模擬器 Modbus Register 欄位
+2. EMS 模擬器 Modbus Register 欄位地址說明
+
+**以下是這個 Modbus 模擬器的參數說明**
+
+- Modbus ID: **7**
+- Host: **localhost**
+- Port: **502**
+- 開始讀取的地址: **21** (不同的 Modbus 工具其開始讀取地址的計算方式可能不同，21 or 22，詳情請看**特別注意事項**)
+- 讀取長度: **27**
+- 寄存器操作類型: **Holding Register**
+
+**Register 欄位地址說明**
 
 | Address | Type    | Description | R/W | Data Type | Unit   | Note |
 |---------|---------|-------------|-----|-----------|--------|------|
@@ -101,8 +112,23 @@ CONTAINER ID   IMAGE                                          COMMAND           
 | 47      | holding | 儲能系統循環使用次數(battery cycle count） | R   | uint16   |        | 儲能系統數值 |
 | 48      | holding | 時間戳 | R   | uint32   | unix time |       |
 
+<<<<<<< HEAD
+**特別注意事項**
+
+如果你使用不同的 Modbus 工具，其**開始讀取的地址**的計算方式可能會有所不同:
+
+- Pymodbus 和 RMMS: 使用零偏移地址，address = 21。
+- ModScan: 使用一偏移地址，address = 22。
+
+這些是連接和讀取數據時必須設定的關鍵參數，確保在使用時正確配置以避免錯誤。
+
+3. 可以使用本地端的腳本工具驗證連線
+
+可以使用 `modbus_tcp_reader.py` 腳本來驗證連線並獲取所需的數據。此腳本使用 Pymodbus 為零偏移地址，address = 21
+=======
 3. 驗證連線
 可以使用 `modbus_tcp_reader.py` 腳本來驗證連線並獲取所需的數據。
+>>>>>>> master-github
 
 需要安裝相關 Python 模組
 ```sh
@@ -128,12 +154,12 @@ options:
 
 此 EMS 模擬器的參數如下：
 
-- -H: MODBUS Server 位置，預設為 localhost
-- -P: MODBUS Server 的 Port，預設為 502
-- -A: 開始讀取的地址為 21
-- -C: 讀取長度為 27
-- -T: 寄存器操作為 holding，在 MODBUS TCP 腳本中我們使用 hr 作為數入參數
-- -U: MODBUS ID 為 7
+- -H: MODBUS Server 位置，預設為 **localhost**
+- -P: MODBUS Server 的 Port，預設為 **502**
+- -A: 開始讀取的地址為 **21**
+- -C: 讀取長度為 **27**
+- -T: 寄存器操作為 holding，在 MODBUS TCP 腳本中我們使用 **hr** 作為數入參數
+- -U: MODBUS ID 為 **7**
 
 執行腳本範例
 ```sh
